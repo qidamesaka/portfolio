@@ -92,16 +92,21 @@
   }
   .cover h1{
     font-family:var(--serif); font-weight:600; font-size:clamp(2.6rem,7vw,5.6rem);
-    line-height:1.03; margin:0 0 28px; max-width:16ch;
+    line-height:1.03; margin:0 0 28px; max-width:22ch;
     font-variation-settings:"opsz" 144;
   }
   .cover h1 em{font-style:italic; color:var(--gold); font-weight:500;}
+  .hero-break{display:none;}
+  @media (min-width:721px){
+    .cover h1{max-width:44ch;}
+    .hero-break{display:inline;}
+  }
   .cover .dek{
     font-size:clamp(1.05rem,1.6vw,1.3rem); color:rgba(248,247,243,0.78);
     max-width:52ch; margin:0 0 44px; font-weight:400;
   }
   .cover .meta-row{
-    display:flex; gap:36px; flex-wrap:wrap;
+    display:flex; gap:72px; flex-wrap:wrap;
     font-family:var(--mono); font-size:12.5px; color:rgba(248,247,243,0.55);
     border-top:1px solid rgba(248,247,243,0.2); padding-top:22px; max-width:640px;
   }
@@ -128,7 +133,7 @@
 
   /* ---------- Chapters ---------- */
   #chapters{background:var(--paper); position:relative;}
-  .chapters-inner{display:grid; grid-template-columns:minmax(0,1fr) 90px; gap:0 20px; max-width:1180px; margin:0 auto;}
+  .chapters-inner{max-width:1180px; margin:0 auto;}
   .chapter-list{grid-column:1;}
   .chapter{
     padding:64px 0; border-top:1px solid var(--rule);
@@ -141,6 +146,34 @@
   .chapter .years{
     font-family:var(--mono); font-size:13px; color:var(--text-soft); letter-spacing:.03em;
     padding-top:6px;
+  }
+  .chapter .cat-tags{display:flex; flex-direction:column; gap:8px; padding-top:2px;}
+  .tag-pill{
+    font-family:var(--mono); font-size:11px; letter-spacing:.04em; text-align:left;
+    color:var(--text-soft); text-transform:uppercase;
+  }
+  .read-more{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.04em; text-transform:uppercase;
+    background:var(--ink); border:1px solid var(--ink); color:var(--paper);
+    padding:12px 20px; margin:6px 0 0; cursor:pointer; transition:background .2s, color .2s, transform .2s;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .read-more:hover{background:var(--teal); border-color:var(--teal); color:var(--paper); transform:translateY(-1px);}
+  .chapter-tags-grouped{margin:20px 0 0; display:flex; flex-direction:column; gap:12px;}
+  .modal-tags{margin:0 0 32px; padding-bottom:28px; border-bottom:1px solid var(--rule);}
+  .tag-group{display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 0;}
+  .tag-group-label{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--teal); margin-right:12px; flex:0 0 auto;
+  }
+  .chapter-tags{display:flex; flex-wrap:wrap; gap:9px 20px; margin:0;}
+  .chapter-tags span{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--sans); font-size:14.5px; color:var(--text-soft);
+  }
+  .chapter-tags span svg{
+    width:15px; height:15px; flex:0 0 auto; stroke:var(--teal); fill:none;
+    stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;
   }
   .chapter .num{
     display:block; font-family:var(--mono); font-size:12px; color:var(--gold); margin-bottom:8px;
@@ -185,34 +218,42 @@
     color:var(--text-soft); border-radius:2px; background:var(--paper);
   }
 
-  /* ---------- Rail (signature element) ---------- */
-  .rail{
-    grid-column:2; position:sticky; top:0; height:100svh;
-    display:flex; align-items:center; justify-content:center;
+  /* ---------- Story Modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:200; display:none; align-items:flex-start; justify-content:center;
+    padding:60px 20px; background:rgba(20,33,61,0.72); overflow-y:auto;
   }
-  .rail-track{
-    position:relative; width:2px; height:70%; background:var(--rule);
+  .modal-overlay.is-open{display:flex;}
+  .modal-panel{
+    background:var(--paper); max-width:800px; width:100%; padding:48px clamp(24px,5vw,56px) 56px;
+    position:relative; box-shadow:0 30px 60px rgba(20,33,61,0.35);
   }
-  .rail-fill{
-    position:absolute; top:0; left:0; width:100%; background:var(--teal);
-    height:0%; transition:height .15s linear;
-  }
-  .rail-ticks{position:absolute; inset:0;}
-  .rail-tick{
-    position:absolute; left:50%; transform:translate(-50%,-50%);
-    width:9px; height:9px; border-radius:50%; background:var(--paper);
-    border:2px solid var(--text-soft); transition:background .3s, border-color .3s, transform .3s;
-  }
-  .rail-tick.active{background:var(--teal); border-color:var(--teal); transform:translate(-50%,-50%) scale(1.25);}
-  .rail-tick .label{
-    position:absolute; right:20px; top:50%; transform:translateY(-50%);
-    font-family:var(--mono); font-size:10.5px; white-space:nowrap; color:var(--text-soft);
-    opacity:0; transition:opacity .25s;
-  }
-  .rail-tick.active .label{opacity:1; color:var(--teal);}
   @media (max-width:900px){
-    .chapters-inner{grid-template-columns:1fr;}
-    .rail{display:none;}
+    .modal-overlay{padding:0;}
+    .modal-panel{max-width:none; width:100%; min-height:100svh; box-shadow:none; padding:56px 22px 60px;}
+  }
+  .modal-close{
+    position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%;
+    border:1px solid var(--rule); background:var(--paper-shade); color:var(--ink);
+    font-size:20px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .2s;
+  }
+  .modal-close:hover{background:var(--rule);}
+  .modal-role{
+    display:block; font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:10px;
+  }
+  .modal-panel h3{
+    font-family:var(--serif); font-weight:600; font-size:clamp(1.6rem,3vw,2.2rem); margin:0 0 14px; line-height:1.15;
+  }
+  .modal-context{font-size:14.5px; color:var(--text-soft); margin:0 0 36px; padding-bottom:24px; border-bottom:1px solid var(--rule);}
+  .modal-panel h4{
+    font-family:var(--serif); font-weight:600; font-size:1.15rem; margin:30px 0 14px; color:var(--ink);
+  }
+  .modal-panel h4:first-of-type{margin-top:0;}
+  .modal-panel p{font-size:15px; line-height:1.7; color:var(--text-soft); margin:0 0 16px;}
+
+  @media (max-width:900px){
     .chapter{grid-template-columns:1fr; gap:8px; padding:44px 0;}
     .chapter .years{
       order:-1; padding-top:0; font-size:12px; letter-spacing:.08em;
@@ -298,19 +339,19 @@
 <header class="site">
   <div class="brand">Qida Mesaka — UI/UX Lead</div>
   <nav>
-    <a href="#chapters">Story</a>
-    <a href="#philosophy">Practice</a>
-    <a href="#contact">Contact</a>
+    <a href="#story-one">Story</a>
+    <a href="#toolkit">Discipline</a>
+    <a href="#footer">Contact</a>
   </nav>
 </header>
 
 <!-- COVER -->
 <section class="cover">
   <span class="eyebrow">A Design Journal</span>
-  <h1>Bridging enterprise strategy with quality-governed product execution.</h1>
+  <h1>Bridging enterprise strategy<br class="hero-break"> with quality-governed<br class="hero-break"> product execution.</h1>
   <p class="dek">I'm Qida Mesaka, an Enterprise Design Leader. I specialize in business process analysis, interactive data visualization, and problem framing—translating high-ambiguity goals into scalable, high-performing team delivery.</p>
   <div class="meta-row">
-    <div><span>Role</span>UI/UX Lead @ Nomura Research Institute</div>
+    <div><span>Current Role</span>UI/UX Lead @ Nomura Research Institute</div>
     <div><span>Tenure</span>15 Years Practice (Since 2011)</div>
   </div>
   <div class="scroll-cue"><div class="line"></div>Scroll to read</div>
@@ -320,24 +361,29 @@
 <section id="chapters">
   <div class="section-head" style="max-width:1180px;margin-left:auto;margin-right:auto;">
     <span class="kicker">The Story</span>
-    <h2>Three chapters, three projects</h2>
+    <h2>Three Recent Stories, 15 Years in the Making</h2>
   </div>
   <div class="chapters-inner">
     <div class="chapter-list" id="chapterList">
 
-      <article class="chapter" data-label="Ch.01 · 2018" data-title="Systems Thinking">
-        <div class="years">2018 — 2021</div>
+      <article class="chapter" id="story-one" data-title="Telematics Platform Transformation">
+        <div class="years cat-tags">
+          <span class="tag-pill">Mobility</span>
+          <span class="tag-pill">Enterprise SaaS</span>
+        </div>
         <div>
-          <span class="num">Chapter One</span>
-          <h3>Systems Thinking</h3>
-          <p>I built a design system from twelve inconsistent screens into a shared language of over four hundred components, used by twenty engineers across four products. It taught me that good design scales only when it's written down.</p>
-          <p>This is where "UX designer" started to feel too small a title for what I was actually doing.</p>
-          <div class="story-project">
-            <span class="role">Founding Design Systems Lead</span>
-            <h4>Orbit Design System</h4>
-            <p>Unified four separate products under one component library and one voice, built for engineers to actually want to use.</p>
-            <div class="outcome">98% component adoption across teams</div>
-            <div class="tags"><span>Design Systems</span><span>Architecture</span></div>
+          <h3>Telematics Platform Transformation</h3>
+          <p>Inherited a telematics platform already breaking under its own fragmentation — and a client who'd never had to think in UX terms. What started as a proposal to merge a few pages became the test that decided whether I belonged on this account, and the start of a four-year transformation.</p>
+          <button class="read-more" type="button" data-modal-target="modal-telematics">Read the full story →</button>
+          <div class="chapter-tags-grouped">
+            <div class="tag-group">
+              <div class="chapter-tags">
+                <span><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.8 7.6 10.3 16M17.2 7.6 13.7 16M7.2 6h9.6"/></svg>Business process analysis</span>
+                <span><svg viewBox="0 0 24 24"><rect x="4" y="10" width="6" height="10" rx="1"/><rect x="14" y="6" width="6" height="14" rx="1"/><path d="M7 14h0M17 10h0"/></svg>Enterprise application design</span>
+                <span><svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5.2 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.8-3-7-7-7Z"/><circle cx="12" cy="9" r="2.3"/></svg>Geospatial information design</span>
+                <span><svg viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><rect x="7" y="12" width="3" height="8"/><rect x="12" y="8" width="3" height="12"/><rect x="17" y="5" width="3" height="15"/></svg>Interactive data visualization</span>
+              </div>
+            </div>
           </div>
         </div>
       </article>
@@ -345,7 +391,6 @@
       <article class="chapter" data-label="Ch.02 · 2021" data-title="Leading Without a Title">
         <div class="years">2021 — 2023</div>
         <div>
-          <span class="num">Chapter Two</span>
           <h3>Leading Without a Title</h3>
           <p>I was mentoring two junior designers long before it was in my job description. When the title finally caught up with the work, I inherited a team of two and grew it to eight — while keeping a hand in real craft, not just process.</p>
           <blockquote>"The interface is the last ten percent. Understanding is the other ninety."</blockquote>
@@ -362,7 +407,6 @@
       <article class="chapter" data-label="Ch.03 · Now" data-title="Where I Practice Now">
         <div class="years">2023 — Now</div>
         <div>
-          <span class="num">Chapter Three</span>
           <h3>Where I Practice Now</h3>
           <p>Today I lead UX at Northlight Health, where I split my time between research strategy, design systems, and coaching the next generation of leads on my team.</p>
           <div class="story-project">
@@ -376,16 +420,63 @@
       </article>
 
     </div>
-    <div class="rail" aria-hidden="true">
-      <div class="rail-track">
-        <div class="rail-fill" id="railFill"></div>
-        <div class="rail-ticks" id="railTicks"></div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- PHILOSOPHY -->
+<!-- STORY MODAL: Telematics Platform Transformation -->
+<div class="modal-overlay" id="modal-telematics" aria-hidden="true">
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-telematics-title">
+    <button class="modal-close" type="button" aria-label="Close">&times;</button>
+    <span class="modal-role">Mobility, Enterprise SaaS</span>
+    <h3 id="modal-telematics-title">Telematics Platform Transformation</h3>
+    <p class="modal-context">Telematics SaaS platform, rebuilt for a Japanese automotive enterprise client, delivered through an IT consulting engagement.</p>
+
+    <h4>Chapter 1 — The Fragments</h4>
+    <p>A few initial meetings in, before I'd proposed anything, I sat, watched, and listened. Ideas clashed, with people defending decisions while others tore them apart, and underneath the noise I was trying to work out what had actually gone wrong. Functions existed without much sense of why a user would actually need them, built to technical spec rather than around any real task or intent. Content had no hierarchy — data sat on the page with no order to signal what mattered or how one piece connected to another. None of it was held together by a design system or any real quality control. The legacy codebase compounded it; performance and stability had degraded to the point that a rebuild from zero was the only realistic path.</p>
+    <p>All of that was a craft problem — the kind structure and better design could solve. The real problem was the one I didn't see coming. Meeting after meeting meant introducing UX concepts the client had never had reason to consider, clearing up a misunderstanding, or pushing back on an idea that sounded reasonable but ran against basic UX principles. Getting the design right was going to be half the job. The other half was this.</p>
+
+    <h4>Chapter 2 — The Hundred Frames</h4>
+    <p>The clearest test came when I proposed merging several data-heavy pages into one. They were related and interconnected, and splitting them across separate screens forced users to reconstruct context that should have lived in one place. On paper, it was the right call. In the room, it wasn't obvious at all.</p>
+    <p>Stakeholders worried the rework would stretch the sprint and the budget with it. The development team resisted for a different reason: the existing pages worked, and rebuilding something functional felt like unnecessary risk. This was my first project on the account, and if I couldn't bring both sides around, it would raise real questions about whether I was ready for a client of this size.</p>
+    <p>Instead of arguing the concept upfront, I built it in front of them, in stages, over the following months. Several heavy features had to be reconciled into one page, and each round of progress went back to stakeholders and the development team before the next began. Feedback came in every session, some of it hard to hear, and I folded it in before returning with the next stage. I took on the core of the page myself early, since I was the one who'd answer for it if the room turned against it.</p>
+    <p>Once the direction held and reactions became more predictable, I brought in other designers for the remaining sub-features. What looked like a single page in the product was close to a hundred Figma frames once every condition, state, and action was accounted for, and no single person was finishing that alone in a reasonable timeframe. My job shifted to making sure their work met the same objective and never dropped the experience quality the concept depended on, since the client saw one name behind the account regardless of who drew which screen. I stayed the one presenting and defending every decision in the room.</p>
+    <p>By the time the full page was ready, the conversation had shifted from whether this was a good idea to what it would take to finish it. Some data wasn't clean enough to merge yet, so we drew a line: what could ship, shipped, and what couldn't went into a backlog for later. The page that shipped was smaller than what I'd first proposed, but the seamlessness that mattered held.</p>
+
+    <h4>Chapter 3 — The Long Game</h4>
+    <p>The client didn't distinguish between who was responsible for quality — a designer, a QA team, a third-party vendor. They only cared that what shipped matched what had been proposed in Figma. So when the third-party QA wasn't catching issues at the standard we needed, closing that gap wasn't optional, it was mine to close. I set up a review layer of our own. My team checked the staging site before anything went to production, screenshotted bugs or inaccurate output, described the expected behavior against it, and tagged me directly. If the development team hit something they couldn't solve, or got blocked, I wanted to know immediately rather than after it shipped.</p>
+    <p>Two years on, the backlog that came out of that first compromise is steady, not because the work slowed down, but because we learned our real capacity and stopped absorbing everything that came our way. That mattered more than it might sound, because the rebuild itself was still expanding — new user roles kept entering scope, and new feature requests kept arriving on top of that. What started as a one-year engagement is now in its fourth year. That wasn't the plan. New features and new user roles kept coming, one after another, each one leading to another contract renewal. Nobody set out to build a four-year relationship. It's what happened when a client kept finding more reasons to keep building with us.</p>
+
+    <div class="chapter-tags-grouped modal-tags">
+      <div class="tag-group">
+        <span class="tag-group-label">Area of Expertise</span>
+        <div class="chapter-tags">
+          <span><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.8 7.6 10.3 16M17.2 7.6 13.7 16M7.2 6h9.6"/></svg>Business process analysis</span>
+          <span><svg viewBox="0 0 24 24"><rect x="4" y="10" width="6" height="10" rx="1"/><rect x="14" y="6" width="6" height="14" rx="1"/><path d="M7 14h0M17 10h0"/></svg>Enterprise application design</span>
+          <span><svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5.2 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.8-3-7-7-7Z"/><circle cx="12" cy="9" r="2.3"/></svg>Geospatial information design</span>
+          <span><svg viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><rect x="7" y="12" width="3" height="8"/><rect x="12" y="8" width="3" height="12"/><rect x="17" y="5" width="3" height="15"/></svg>Interactive data visualization</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <span class="tag-group-label">Leadership</span>
+        <div class="chapter-tags">
+          <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6" fill="var(--teal)"/></svg>Requirements &amp; problem framing</span>
+          <span><svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="17" cy="8" r="3"/><path d="M2.5 19c.6-3 2.5-5 4.5-5s3.9 2 4.5 5M12.5 19c.6-3 2.5-5 4.5-5s3.9 2 4.5 5"/></svg>Client &amp; stakeholder management</span>
+          <span><svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>Design delivery &amp; quality governance</span>
+          <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15 9-4.2 2.8L9 16l4.2-2.8L15 9Z"/></svg>Design direction</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <span class="tag-group-label">Design Fluency</span>
+        <div class="chapter-tags">
+          <span><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="13" height="9" rx="1"/><rect x="17" y="9" width="4.5" height="10" rx="1"/></svg>Responsive and adaptive design</span>
+          <span><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v6M12 13H5v4M12 13h7v4"/></svg>Information architecture</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <section id="philosophy">
   <div class="quote-wrap">
     <span class="kicker" style="color:var(--teal); font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; display:block; margin-bottom:20px;">How I Practice</span>
@@ -439,9 +530,9 @@
   <h2>Let's write the next chapter together.</h2>
   <div class="contact-links">
     <a href="mailto:qida@example.com">qida@example.com</a>
-    <a class="ghost" href="#">LinkedIn ↗</a>
+    <a class="ghost" href="https://jp.linkedin.com/in/qidamesa" target="_blank" rel="noopener">LinkedIn ↗</a>
   </div>
-  <footer class="foot">
+  <footer class="foot" id="footer">
     <span>© 2026 Qida Mesaka. All rights reserved.</span>
   </footer>
 </section>
@@ -450,21 +541,6 @@
 (function(){
   var chapters = Array.prototype.slice.call(document.querySelectorAll('#chapterList .chapter'));
   var cards = Array.prototype.slice.call(document.querySelectorAll('.work-card'));
-  var railTicks = document.getElementById('railTicks');
-  var railFill = document.getElementById('railFill');
-
-  // Build rail ticks from chapter data
-  chapters.forEach(function(ch, i){
-    var tick = document.createElement('div');
-    tick.className = 'rail-tick';
-    tick.style.top = (chapters.length === 1 ? 50 : (i / (chapters.length - 1)) * 100) + '%';
-    var label = document.createElement('div');
-    label.className = 'label';
-    label.textContent = ch.dataset.label + ' — ' + ch.dataset.title;
-    tick.appendChild(label);
-    railTicks.appendChild(tick);
-    ch._tick = tick;
-  });
 
   // Reveal on scroll
   var revealObserver = new IntersectionObserver(function(entries){
@@ -474,19 +550,32 @@
   }, {threshold:0.2});
   chapters.concat(cards).forEach(function(el){ revealObserver.observe(el); });
 
-  // Active chapter tracking for rail
-  var activeObserver = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      var idx = chapters.indexOf(entry.target);
-      if(entry.isIntersecting){
-        chapters.forEach(function(c){ c._tick.classList.remove('active'); });
-        entry.target._tick.classList.add('active');
-        var pct = chapters.length === 1 ? 100 : (idx / (chapters.length - 1)) * 100;
-        railFill.style.height = pct + '%';
-      }
+  // Story modal open/close
+  function closeModal(overlay){
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+  document.querySelectorAll('[data-modal-target]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var overlay = document.getElementById(btn.dataset.modalTarget);
+      if(!overlay) return;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+      overlay.scrollTop = 0;
     });
-  }, {threshold:0.5, rootMargin:'-10% 0px -10% 0px'});
-  chapters.forEach(function(ch){ activeObserver.observe(ch); });
+  });
+  document.querySelectorAll('.modal-overlay').forEach(function(overlay){
+    overlay.addEventListener('click', function(e){ if(e.target === overlay){ closeModal(overlay); } });
+    var closeBtn = overlay.querySelector('.modal-close');
+    if(closeBtn){ closeBtn.addEventListener('click', function(){ closeModal(overlay); }); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      document.querySelectorAll('.modal-overlay.is-open').forEach(closeModal);
+    }
+  });
 })();
 </script>
 
