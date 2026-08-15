@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qida Mesaka — Enterprise Design Leader, Design Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14213D;
+    --ink-soft:#1D2C4F;
+    --paper:#F8F7F3;
+    --paper-shade:#EEEDE7;
+    --text:#14213D;
+    --text-soft:#475569;
+    --gold:#C49A3A;
+    --teal:#0F766E;
+    --rule: rgba(28,32,51,0.16);
+    --serif: "Fraunces", serif;
+    --sans: "IBM Plex Sans", sans-serif;
+    --mono: "IBM Plex Mono", monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--gold); color:var(--ink);}
+
+  /* ---------- Focus ---------- */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:3px;
+  }
+
+  /* ---------- Nav ---------- */
+  header.site{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px clamp(20px,5vw,56px);
+    mix-blend-mode:normal;
+    pointer-events:none;
+  }
+  header.site .brand{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.06em;
+    color:var(--paper); background:var(--ink); padding:8px 14px;
+    pointer-events:auto;
+  }
+  header.site nav{
+    display:flex; gap:22px; font-family:var(--mono); font-size:12px;
+    letter-spacing:0.06em; text-transform:uppercase;
+    background:var(--paper); padding:10px 16px; border:1px solid var(--rule);
+    pointer-events:auto;
+  }
+  header.site nav a{text-decoration:none; color:var(--text-soft); transition:color .2s;}
+  header.site nav a:hover{color:var(--teal);}
+  @media (max-width:720px){ header.site nav{display:none;} }
+
+  /* ---------- Hero / Cover ---------- */
+  .cover{
+    min-height:100svh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:120px clamp(20px,6vw,80px) 80px;
+    background:
+      radial-gradient(circle at 88% 12%, rgba(196,154,58,0.16), transparent 45%),
+      var(--ink);
+    color:var(--paper);
+    position:relative; overflow:hidden;
+  }
+  .cover::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(to bottom, rgba(248,247,243,0.05) 0 1px, transparent 1px 48px);
+    pointer-events:none;
+  }
+  .cover .eyebrow{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:22px;
+  }
+  .cover h1{
+    font-family:var(--serif); font-weight:600; font-size:clamp(2.6rem,7vw,5.6rem);
+    line-height:1.03; margin:0 0 28px; max-width:16ch;
+    font-variation-settings:"opsz" 144;
+  }
+  .cover h1 em{font-style:italic; color:var(--gold); font-weight:500;}
+  .cover .dek{
+    font-size:clamp(1.05rem,1.6vw,1.3rem); color:rgba(248,247,243,0.78);
+    max-width:52ch; margin:0 0 44px; font-weight:400;
+  }
+  .cover .meta-row{
+    display:flex; gap:36px; flex-wrap:wrap;
+    font-family:var(--mono); font-size:12.5px; color:rgba(248,247,243,0.55);
+    border-top:1px solid rgba(248,247,243,0.2); padding-top:22px; max-width:640px;
+  }
+  .cover .meta-row div span{display:block; color:var(--paper); font-size:14px; margin-bottom:4px;}
+  .scroll-cue{
+    position:absolute; bottom:36px; left:clamp(20px,6vw,80px);
+    font-family:var(--mono); font-size:11px; letter-spacing:0.1em; color:rgba(248,247,243,0.5);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-cue .line{width:1px; height:36px; background:rgba(248,247,243,0.4); animation:pulse 2.2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scaleY(1); opacity:.5;} 50%{transform:scaleY(0.5); opacity:1;}}
+
+  /* ---------- Section shell ---------- */
+  section{padding:100px clamp(20px,6vw,80px);}
+  .section-head{margin-bottom:56px; max-width:60ch;}
+  .section-head .kicker{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--teal); display:block; margin-bottom:14px;
+  }
+  .section-head h2{
+    font-family:var(--serif); font-weight:600; font-size:clamp(1.9rem,3.4vw,2.8rem);
+    margin:0; line-height:1.12;
+  }
+
+  /* ---------- Chapters ---------- */
+  #chapters{background:var(--paper); position:relative;}
+  .chapters-inner{display:grid; grid-template-columns:minmax(0,1fr) 90px; gap:0 20px; max-width:1180px; margin:0 auto;}
+  .chapter-list{grid-column:1;}
+  .chapter{
+    padding:64px 0; border-top:1px solid var(--rule);
+    display:grid; grid-template-columns:140px minmax(0,1fr); gap:32px;
+    opacity:0; transform:translateY(18px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .chapter.in-view{opacity:1; transform:translateY(0);}
+  .chapter:last-child{border-bottom:1px solid var(--rule);}
+  .chapter .years{
+    font-family:var(--mono); font-size:13px; color:var(--text-soft); letter-spacing:.03em;
+    padding-top:6px;
+  }
+  .chapter .num{
+    display:block; font-family:var(--mono); font-size:12px; color:var(--gold); margin-bottom:8px;
+  }
+  .chapter h3{
+    font-family:var(--serif); font-size:clamp(1.5rem,2.4vw,2rem); font-weight:600; margin:0 0 14px;
+  }
+  .chapter p{margin:0 0 16px; color:var(--text-soft); max-width:62ch;}
+  .chapter blockquote{
+    font-family:var(--serif); font-style:italic; font-size:1.15rem; color:var(--ink);
+    margin:24px 0 0; padding:0; position:relative;
+  }
+  .chapter blockquote::before{
+    content:"“"; display:block; font-family:var(--serif); font-style:normal; font-weight:600;
+    font-size:2.6rem; line-height:1; color:var(--gold); margin-bottom:-6px;
+  }
+  .figure{
+    margin-top:20px; height:64px; display:flex; align-items:flex-end; gap:3px;
+  }
+  .figure span{
+    display:block; width:5px; background:var(--teal); opacity:.55; border-radius:1px 1px 0 0;
+  }
+  .story-project{
+    margin-top:24px; background:var(--paper-shade); border:1px solid var(--rule);
+    padding:20px 22px; max-width:62ch;
+  }
+  .story-project .role{
+    font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--teal); display:block; margin-bottom:6px;
+  }
+  .story-project h4{
+    font-family:var(--serif); font-size:1.15rem; font-weight:600; margin:0 0 8px; color:var(--ink);
+  }
+  .story-project p{font-size:14px; margin:0 0 14px; color:var(--text-soft);}
+  .story-project .outcome{
+    font-family:var(--mono); font-size:12.5px; color:var(--ink); background:rgba(15,118,110,0.1);
+    padding:8px 10px; margin-bottom:12px;
+  }
+  .story-project .tags{display:flex; gap:8px; flex-wrap:wrap;}
+  .story-project .tags span{
+    font-family:var(--mono); font-size:10.5px; padding:4px 9px; border:1px solid var(--rule);
+    color:var(--text-soft); border-radius:2px; background:var(--paper);
+  }
+
+  /* ---------- Rail (signature element) ---------- */
+  .rail{
+    grid-column:2; position:sticky; top:0; height:100svh;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .rail-track{
+    position:relative; width:2px; height:70%; background:var(--rule);
+  }
+  .rail-fill{
+    position:absolute; top:0; left:0; width:100%; background:var(--teal);
+    height:0%; transition:height .15s linear;
+  }
+  .rail-ticks{position:absolute; inset:0;}
+  .rail-tick{
+    position:absolute; left:50%; transform:translate(-50%,-50%);
+    width:9px; height:9px; border-radius:50%; background:var(--paper);
+    border:2px solid var(--text-soft); transition:background .3s, border-color .3s, transform .3s;
+  }
+  .rail-tick.active{background:var(--teal); border-color:var(--teal); transform:translate(-50%,-50%) scale(1.25);}
+  .rail-tick .label{
+    position:absolute; right:20px; top:50%; transform:translateY(-50%);
+    font-family:var(--mono); font-size:10.5px; white-space:nowrap; color:var(--text-soft);
+    opacity:0; transition:opacity .25s;
+  }
+  .rail-tick.active .label{opacity:1; color:var(--teal);}
+  @media (max-width:900px){
+    .chapters-inner{grid-template-columns:1fr;}
+    .rail{display:none;}
+    .chapter{grid-template-columns:1fr; gap:8px; padding:44px 0;}
+    .chapter .years{
+      order:-1; padding-top:0; font-size:12px; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--teal);
+    }
+  }
+
+  /* ---------- Work ---------- */
+  #work{background:var(--ink); color:var(--paper);}
+  #work .section-head .kicker{color:var(--gold);}
+  #work .section-head p{color:rgba(248,247,243,0.7); margin-top:14px;}
+  .work-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1px; background:rgba(248,247,243,0.15); max-width:1180px; margin:0 auto;}
+  .work-card{
+    background:var(--ink); padding:36px 30px; display:flex; flex-direction:column; gap:14px;
+    opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;
+  }
+  .work-card.in-view{opacity:1; transform:translateY(0);}
+  .work-card .role{font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--gold);}
+  .work-card h3{font-family:var(--serif); font-size:1.4rem; margin:0; font-weight:600; line-height:1.25;}
+  .work-card .outcome{
+    font-family:var(--mono); font-size:13px; color:var(--paper); background:rgba(248,247,243,0.08);
+    padding:10px 12px;
+  }
+  .work-card .tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:8px;}
+  .work-card .tags span{
+    font-family:var(--mono); font-size:10.5px; padding:4px 9px; border:1px solid rgba(248,247,243,0.3);
+    color:rgba(248,247,243,0.75); border-radius:2px;
+  }
+
+  /* ---------- Philosophy ---------- */
+  #philosophy{
+    background:var(--paper-shade); text-align:left;
+  }
+  #philosophy .quote-wrap{max-width:800px; margin:0 auto;}
+  #philosophy blockquote{
+    font-family:var(--serif); font-weight:500; font-style:italic;
+    font-size:clamp(1.6rem,3.6vw,2.5rem); line-height:1.35; margin:0 0 24px; color:var(--ink);
+  }
+  #philosophy cite{font-family:var(--mono); font-style:normal; font-size:13px; color:var(--text-soft);}
+
+  /* ---------- Toolkit ---------- */
+  #toolkit{background:var(--paper);}
+  .toolkit-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:40px; max-width:1180px; margin:0 auto;}
+  .toolkit-group .kicker{
+    display:block; font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--rule);
+  }
+  .toolkit-group ul{list-style:none; margin:0; padding:0;}
+  .toolkit-group li{
+    padding:10px 0; border-bottom:1px dashed var(--rule); font-size:14.5px; color:var(--text-soft);
+    display:flex; align-items:flex-start; gap:11px;
+  }
+  .toolkit-group li svg{
+    flex:0 0 auto; width:17px; height:17px; margin-top:2px;
+    stroke:var(--teal); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;
+  }
+
+  /* ---------- Contact ---------- */
+  #contact{
+    background:var(--ink); color:var(--paper); text-align:left;
+    padding-bottom:60px;
+  }
+  #contact h2{
+    font-family:var(--serif); font-weight:600; font-size:clamp(2rem,5vw,3.6rem);
+    max-width:14ch; margin:0 0 36px; line-height:1.08;
+  }
+  .contact-links{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:70px;}
+  .contact-links a{
+    font-family:var(--mono); font-size:13px; text-decoration:none; color:var(--ink);
+    background:var(--gold); padding:12px 20px; border-radius:2px; transition:background .2s, transform .2s;
+  }
+  .contact-links a.ghost{background:transparent; color:var(--paper); border:1px solid rgba(248,247,243,0.35);}
+  .contact-links a:hover{transform:translateY(-2px);}
+  footer.foot{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-family:var(--mono); font-size:11.5px; color:rgba(248,247,243,0.45);
+    border-top:1px solid rgba(248,247,243,0.15); padding-top:22px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="brand">Qida Mesaka — UI/UX Lead</div>
+  <nav>
+    <a href="#chapters">Story</a>
+    <a href="#philosophy">Practice</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- COVER -->
+<section class="cover">
+  <span class="eyebrow">A Design Journal</span>
+  <h1>Bridging enterprise strategy with quality-governed product execution.</h1>
+  <p class="dek">I'm Qida Mesaka, an Enterprise Design Leader. I specialize in business process analysis, interactive data visualization, and problem framing—translating high-ambiguity goals into scalable, high-performing team delivery.</p>
+  <div class="meta-row">
+    <div><span>Role</span>UI/UX Lead @ Nomura Research Institute</div>
+    <div><span>Tenure</span>15 Years Practice (Since 2011)</div>
+  </div>
+  <div class="scroll-cue"><div class="line"></div>Scroll to read</div>
+</section>
+
+<!-- CHAPTERS -->
+<section id="chapters">
+  <div class="section-head" style="max-width:1180px;margin-left:auto;margin-right:auto;">
+    <span class="kicker">The Story</span>
+    <h2>Three chapters, three projects</h2>
+  </div>
+  <div class="chapters-inner">
+    <div class="chapter-list" id="chapterList">
+
+      <article class="chapter" data-label="Ch.01 · 2018" data-title="Systems Thinking">
+        <div class="years">2018 — 2021</div>
+        <div>
+          <span class="num">Chapter One</span>
+          <h3>Systems Thinking</h3>
+          <p>I built a design system from twelve inconsistent screens into a shared language of over four hundred components, used by twenty engineers across four products. It taught me that good design scales only when it's written down.</p>
+          <p>This is where "UX designer" started to feel too small a title for what I was actually doing.</p>
+          <div class="story-project">
+            <span class="role">Founding Design Systems Lead</span>
+            <h4>Orbit Design System</h4>
+            <p>Unified four separate products under one component library and one voice, built for engineers to actually want to use.</p>
+            <div class="outcome">98% component adoption across teams</div>
+            <div class="tags"><span>Design Systems</span><span>Architecture</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter" data-label="Ch.02 · 2021" data-title="Leading Without a Title">
+        <div class="years">2021 — 2023</div>
+        <div>
+          <span class="num">Chapter Two</span>
+          <h3>Leading Without a Title</h3>
+          <p>I was mentoring two junior designers long before it was in my job description. When the title finally caught up with the work, I inherited a team of two and grew it to eight — while keeping a hand in real craft, not just process.</p>
+          <blockquote>"The interface is the last ten percent. Understanding is the other ninety."</blockquote>
+          <div class="story-project">
+            <span class="role">UX Lead</span>
+            <h4>Northlight Patient Portal Redesign</h4>
+            <p>Rebuilt the onboarding flow around real patient interviews instead of internal assumptions about what "simple" meant.</p>
+            <div class="outcome">-34% onboarding drop-off · -40% related support tickets</div>
+            <div class="tags"><span>Healthcare</span><span>Research</span><span>Systems</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter" data-label="Ch.03 · Now" data-title="Where I Practice Now">
+        <div class="years">2023 — Now</div>
+        <div>
+          <span class="num">Chapter Three</span>
+          <h3>Where I Practice Now</h3>
+          <p>Today I lead UX at Northlight Health, where I split my time between research strategy, design systems, and coaching the next generation of leads on my team.</p>
+          <div class="story-project">
+            <span class="role">Lead Researcher &amp; Designer</span>
+            <h4>Fieldwork: SMB Banking App</h4>
+            <p>Spent six weeks in small business owners' shops before redesigning a single screen — the fieldwork was the deliverable.</p>
+            <div class="outcome">+22% activation, six weeks post-launch</div>
+            <div class="tags"><span>Fintech</span><span>Field Research</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+    <div class="rail" aria-hidden="true">
+      <div class="rail-track">
+        <div class="rail-fill" id="railFill"></div>
+        <div class="rail-ticks" id="railTicks"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section id="philosophy">
+  <div class="quote-wrap">
+    <span class="kicker" style="color:var(--teal); font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; display:block; margin-bottom:20px;">How I Practice</span>
+    <blockquote>"Good design isn't a deliverable. It's a habit of paying attention — to people, to systems, and to the story a product tells over time."</blockquote>
+    <cite>— Qida Mesaka</cite>
+  </div>
+</section>
+
+<!-- TOOLKIT -->
+<section id="toolkit">
+  <div class="section-head" style="margin-left:auto;margin-right:auto;max-width:1180px;">
+    <span class="kicker">The Discipline</span>
+    <h2>Where business, people, and expertise meet.</h2>
+  </div>
+  <div class="toolkit-grid">
+    <div class="toolkit-group">
+      <span class="kicker">Area of Expertise</span>
+      <ul>
+        <li><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-3.5 10.9c.4.3.6.8.6 1.3V16h5.8v-.8c0-.5.2-1 .6-1.3A6 6 0 0 0 12 3Z"/><path d="M9.5 19h5M10 21.5h4"/></svg>Analytical Thinking and Conceptualization</li>
+        <li><svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5.2 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.8-3-7-7-7Z"/><circle cx="12" cy="9" r="2.3"/></svg>Geospatial Information Design</li>
+        <li><svg viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><rect x="7" y="12" width="3" height="8"/><rect x="12" y="8" width="3" height="12"/><rect x="17" y="5" width="3" height="15"/></svg>Interactive Data Visualization</li>
+        <li><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.8 7.6 10.3 16M17.2 7.6 13.7 16M7.2 6h9.6"/></svg>Business Process Analysis and Solution Design</li>
+        <li><svg viewBox="0 0 24 24"><rect x="4" y="10" width="6" height="10" rx="1"/><rect x="14" y="6" width="6" height="14" rx="1"/><path d="M7 14h0M17 10h0"/></svg>Enterprise Application Design</li>
+      </ul>
+    </div>
+    <div class="toolkit-group">
+      <span class="kicker">Leadership</span>
+      <ul>
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6" fill="var(--teal)"/></svg>Requirements and Problem Framing</li>
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15 9-4.2 2.8L9 16l4.2-2.8L15 9Z"/></svg>Design Direction</li>
+        <li><svg viewBox="0 0 24 24"><circle cx="7" cy="8" r="3"/><circle cx="17" cy="8" r="3"/><path d="M2.5 19c.6-3 2.5-5 4.5-5s3.9 2 4.5 5M12.5 19c.6-3 2.5-5 4.5-5s3.9 2 4.5 5"/></svg>Client and Stakeholder Management</li>
+        <li><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M3.5 19c.6-3.2 2.7-5.4 5.5-5.4s4.9 2.2 5.5 5.4"/><circle cx="17.5" cy="8.5" r="2.2"/><path d="M15.8 13.3c1.9.2 3.4 1.9 3.9 4.2"/></svg>Team Leadership and Mentoring</li>
+        <li><svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6l-7-3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>Design Delivery and Quality Governance</li>
+      </ul>
+    </div>
+    <div class="toolkit-group">
+      <span class="kicker">Design Fluency</span>
+      <ul>
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v6M12 13H5v4M12 13h7v4"/></svg>Information Architecture</li>
+        <li><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 8h18M8 8v12"/></svg>Wire-framing and Prototyping</li>
+        <li><svg viewBox="0 0 24 24"><path d="M6 3v13.5L9.5 14l2 5 2.4-1-2-5H16L6 3Z"/></svg>Interaction Design</li>
+        <li><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="13" height="9" rx="1"/><rect x="17" y="9" width="4.5" height="10" rx="1"/></svg>Responsive and Adaptive Design</li>
+        <li><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Design Systems</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2>Let's write the next chapter together.</h2>
+  <div class="contact-links">
+    <a href="mailto:qida@example.com">qida@example.com</a>
+    <a class="ghost" href="#">LinkedIn ↗</a>
+  </div>
+  <footer class="foot">
+    <span>© 2026 Qida Mesaka. All rights reserved.</span>
+  </footer>
+</section>
+
+<script>
+(function(){
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('#chapterList .chapter'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.work-card'));
+  var railTicks = document.getElementById('railTicks');
+  var railFill = document.getElementById('railFill');
+
+  // Build rail ticks from chapter data
+  chapters.forEach(function(ch, i){
+    var tick = document.createElement('div');
+    tick.className = 'rail-tick';
+    tick.style.top = (chapters.length === 1 ? 50 : (i / (chapters.length - 1)) * 100) + '%';
+    var label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = ch.dataset.label + ' — ' + ch.dataset.title;
+    tick.appendChild(label);
+    railTicks.appendChild(tick);
+    ch._tick = tick;
+  });
+
+  // Reveal on scroll
+  var revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){ entry.target.classList.add('in-view'); }
+    });
+  }, {threshold:0.2});
+  chapters.concat(cards).forEach(function(el){ revealObserver.observe(el); });
+
+  // Active chapter tracking for rail
+  var activeObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var idx = chapters.indexOf(entry.target);
+      if(entry.isIntersecting){
+        chapters.forEach(function(c){ c._tick.classList.remove('active'); });
+        entry.target._tick.classList.add('active');
+        var pct = chapters.length === 1 ? 100 : (idx / (chapters.length - 1)) * 100;
+        railFill.style.height = pct + '%';
+      }
+    });
+  }, {threshold:0.5, rootMargin:'-10% 0px -10% 0px'});
+  chapters.forEach(function(ch){ activeObserver.observe(ch); });
+})();
+</script>
+
+</body>
+</html>
